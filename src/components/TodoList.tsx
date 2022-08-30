@@ -38,6 +38,8 @@ export default function TodoList() {
   const [todo, setTodoList] = useState<TodoItem[]>([]);
   const [finished, setFinishedList] = useState<TodoItem[]>([]);
   const [tag, setTag] = useState<string>("");
+  const [byDate, setByDate] = useState<boolean>(false);
+  const [byFinished, setByFinished] = useState<boolean>(false);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.name === "title") {
