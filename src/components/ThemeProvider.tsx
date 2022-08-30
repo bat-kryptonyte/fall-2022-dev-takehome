@@ -14,7 +14,7 @@ export const ThemeProvider: React.FC = ({ children }) => {
     setTheme(theme === "light" ? "dark" : "light");
   };
 
-  const color = theme === "light" ? "#333" : "#AAA";
+  const color = theme === "light" ? "#777" : "#AAA";
   const backgroundColor = theme === "light" ? "#CCC" : "#555";
 
   document.body.style.color = color;

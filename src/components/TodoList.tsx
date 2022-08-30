@@ -101,14 +101,14 @@ export default function TodoList() {
   return (
     <div>
         <div>
-        <Box p="5" maxW="600px" borderRadius='lg' borderWidth="1px">
+        <Box p="5" maxW="600px" borderRadius='lg' borderWidth="1px" >
         <Stack spacing={4}>
           <InputGroup>
-            <Input type = "text" placeholder = "Title..." name = "title" value = {title} onChange={handleChange} />
+            <Input type = "text"  placeholder = "Title..." name = "title" value = {title} onChange={handleChange} />
           </InputGroup>
           <InputGroup>
 
-            <Input type = "text" placeholder = "Tags..." name = "tagList" value = {tag} onChange={handleChange} />
+            <Input type = "text"  placeholder = "Tags..."  name = "tagList" value = {tag} onChange={handleChange} />
 
             <Button onClick={createTag}>Add Tag</Button>
           </InputGroup>
@@ -124,7 +124,7 @@ export default function TodoList() {
           
           <InputGroup>
 
-            <Input placeholder="Select Date and Time" size="md" type="date" name = "duedate" value = {dueDate} onChange={handleChange} />
+            <Input placeholder="Select Date and Time"  size="md" type="date" name = "duedate" value = {dueDate} onChange={handleChange} />
           </InputGroup>
 
           <Button onClick={createTask}>Create Task</Button>
