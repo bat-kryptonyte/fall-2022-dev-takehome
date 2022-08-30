@@ -25,10 +25,10 @@ const { theme, toggleTheme } = useContext(ThemeContext);
     <ThemeProvider>
     <Stack margin = {4} spacing = {4}>
     <button onClick={toggleTheme}>
-    {theme === 'dark' ? (
-              <SunIcon w={6} h={6} />
-            ) : (
+    {theme === 'light' ? (
               <MoonIcon w={6} h={6} />
+            ) : (
+              <SunIcon w={6} h={6} />
             )}
       </button>
     <Text align = "center" fontSize = "2xl">
