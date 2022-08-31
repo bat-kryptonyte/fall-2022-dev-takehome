@@ -1,11 +1,14 @@
 import React, { ChangeEvent, useState } from 'react';
 
-import { Box, Button, Switch, Center, Image, Flex, Badge, Text, Input, Stack, InputGroup, InputLeftAddon, Heading} from "@chakra-ui/react";
+import { Box, Button, Switch, Center, Checkbox, Image, Flex, Badge, Text, Input, Stack, InputGroup, InputLeftAddon, Heading, Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription, CloseButton} from "@chakra-ui/react";
 
 
 import Task from './Task'
 import Tag from './Tag'
-import FinishedTask from './FinishedTask';
+import Sort from './Sort'
 /**
  * Thank you for applying to Bits of Good. You are free to add/delete/modify any 
  * parts of this project. That includes changing the types.ts, creating css files, 
@@ -39,7 +42,9 @@ export default function TodoList() {
   const [finished, setFinishedList] = useState<TodoItem[]>([]);
   const [tag, setTag] = useState<string>("");
   const [byDate, setByDate] = useState<boolean>(false);
-  const [byFinished, setByFinished] = useState<boolean>(false);
+  const [byComplete, setByComplete] = useState<boolean>(false);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.name === "title") {
@@ -58,13 +63,14 @@ export default function TodoList() {
     const newTodo = {title: title, dueDate: dueDate, tagList: tagList, completed: false};
 
     if (newTodo.title !== "" && newTodo.dueDate !== new Date().toLocaleDateString()){
-
+      setShowAlert(false);
       setTodoList([...todo, newTodo]);
-
       setTitle("");
       setDueDate((new Date().toLocaleDateString()));
       setTagList([]);
-    } 
+    } else {
+      setShowAlert(!showAlert)
+    }
       
 
     setTitle("");
@@ -79,17 +85,23 @@ export default function TodoList() {
     setTag("");
   }
 
+  const sortDate = ():void => {
+
+      setTodoList(todo.slice().sort((a, b) => Date.parse(a.dueDate) - Date.parse(b.dueDate)))
+  }
+
+  const sortComplete = ():void => {
+      setTodoList(todo.slice().sort((a, b) =>  Number(a.completed) - Number(b.completed)))
+    
+  }
+
+
   const completeTask = (toDelete: string):void => {
-    todo.forEach(task => {
-      if (task.title == toDelete) {
-        const newItem = finished;
-        newItem.push(task);
-        setFinishedList(newItem);
-      }
-    })
-    setTodoList(todo.filter((task) => {
-      return task.title !== toDelete
-    }))
+      todo.forEach(task => {
+        if (task.title == toDelete) {
+          task.completed = true;
+        }
+      })
   }
 
   const deleteTag = (toDelete: string):void => {
@@ -101,16 +113,17 @@ export default function TodoList() {
   return (
     <div>
         <div>
+        <Stack spacing = {4}>
         <Box p="5" maxW="600px" borderRadius='lg' borderWidth="1px" >
         <Stack spacing={4}>
           <InputGroup>
-            <Input type = "text"  placeholder = "Title..." name = "title" value = {title} onChange={handleChange} />
+            <Input type = "text"  placeholder = "task title..." name = "title" value = {title} onChange={handleChange} />
           </InputGroup>
           <InputGroup>
 
-            <Input type = "text"  placeholder = "Tags..."  name = "tagList" value = {tag} onChange={handleChange} />
+            <Input type = "text"  placeholder = "tags..."  name = "tagList" value = {tag} onChange={handleChange} />
 
-            <Button onClick={createTag}>Add Tag</Button>
+            <Button onClick={createTag}>add tag</Button>
           </InputGroup>
 
           <Flex align="baseline" mt={2}>
@@ -122,31 +135,40 @@ export default function TodoList() {
             </Stack>
           </Flex>
           
+          <Text align = "center" fontSize = "md">select a due date</Text>
           <InputGroup>
 
             <Input placeholder="Select Date and Time"  size="md" type="date" name = "duedate" value = {dueDate} onChange={handleChange} />
           </InputGroup>
 
-          <Button onClick={createTask}>Create Task</Button>
+          <Button onClick={createTask}>create task</Button>
+
+            {showAlert ? (
+                   <Alert status = "error">
+                       plz specify a due date and task name
+                   </Alert>
+            ) : (<></>)}
+
 
         </Stack>
         
         
         </Box>
+
+        <Sort sortDate = {sortDate} sortComplete = {sortComplete} byDate = {byDate} byComplete = {byComplete}/>
+        <div>
+      {todo.map((task: TodoItem, key: number) => {
+        return <Task key = {key} task = {task} completeTask = {completeTask} deleteTag = {deleteTag} />;
+      })}
+    </div>
+        </Stack>
+        
       
       
     </div>
     
+    
     <div>
-      {todo.map((task: TodoItem, key: number) => {
-        return <Task key = {key} task = {task} completeTask = {completeTask} deleteTag = {deleteTag}/>;
-      })}
-    </div>
-    <div>
-      Finished List:
-      {finished.map((task: TodoItem, key: number) => {
-        return <FinishedTask key = {key} finished = {task} />;
-      })}
     </div>
     </div>
     
